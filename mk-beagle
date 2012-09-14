@@ -1,0 +1,18 @@
+#!/bin/sh
+SRC=xload
+CROSS_COMPILE=arm-none-linux-gnueabi-
+ARCH=arm
+DEFAULT_CONFIG=""
+
+make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm distclean
+make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm omap3beagle_config
+make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm
+signGP x-load.bin
+
+
+#DAEMON=/usr/sbin/pcscd
+#NAME=pcscd
+#DESC="PCSC Daemon"
+#PIDFILE=/var/run/pcscd/pcscd.pid
+#ARGS=""
+#test -f $DAEMON || exit 0
