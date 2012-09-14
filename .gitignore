@@ -45,6 +45,10 @@ modules.builtin
 /Module.markers
 /Module.symvers
 *.txt
+x-load
+x-load.bin.ift
+x-load.map
+MLO
 
 #
 # Debian directory (make deb-pkg)

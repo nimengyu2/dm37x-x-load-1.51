@@ -189,6 +189,9 @@ u32 is_cpu_family(void)
 	__asm__ __volatile__("mrc p15, 0, %0, c0, c0, 0":"=r"(cpuid));
 	if ((cpuid & 0xf) == 0x0) {
 		cpu_family = CPU_OMAP34XX;
+		#ifdef CFG_PRINTF
+        		printf("cpuid  0xf == 0x0 cpu_family = CPU_OMAP34XX\n");
+		#endif
 	} else {
 		cpuid = __raw_readl(OMAP34XX_CONTROL_ID);
 		hawkeye  = (cpuid >> HAWKEYE_SHIFT) & 0xffff;
@@ -196,15 +199,27 @@ u32 is_cpu_family(void)
 		switch (hawkeye) {
 			case HAWKEYE_OMAP34XX:
 				cpu_family = CPU_OMAP34XX;
+				#ifdef CFG_PRINTF
+        			printf("HAWKEYE_OMAP34XX cpu_family =  CPU_OMAP34XX\n");
+				#endif
 				break;
 			case HAWKEYE_AM35XX:
 				cpu_family = CPU_AM35XX;
+				#ifdef CFG_PRINTF
+        			printf("cpu_family =  CPU_AM35XX\n");
+				#endif
 				break;
 			case HAWKEYE_OMAP36XX:
 				cpu_family = CPU_OMAP36XX;
+				#ifdef CFG_PRINTF
+        			printf("cpu_family =  CPU_OMAP36XX\n");
+				#endif
 				break;
 			default:
 				cpu_family = CPU_OMAP34XX;
+				#ifdef CFG_PRINTF
+        			printf("default cpu_family =  CPU_OMAP34XX\n");
+				#endif
 				break;
 		}
 	}
