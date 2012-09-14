@@ -33,6 +33,17 @@
 #include <common.h>
 #include <asm/arch/mem.h>
 #include <asm/arch/sys_proto.h>
+#include <asm/arch/bits.h>
+#include <asm/arch/cpu.h>
+#include <asm/arch/bits.h>
+#include <asm/arch/mux.h>
+#include <asm/arch/sys_info.h>
+#include <asm/arch/clocks.h>
+
+#define __raw_readl(a)    (*(volatile unsigned int *)(a))
+#define __raw_writel(v,a) (*(volatile unsigned int *)(a) = (v))
+#define __raw_readw(a)    (*(volatile unsigned short *)(a))
+#define __raw_writew(v,a) (*(volatile unsigned short *)(a) = (v))
 
 extern int misc_init_r (void);
 extern u32 get_mem_type(void);
@@ -58,7 +69,7 @@ init_fnc_t *init_sequence[] = {
   	nand_init,		/* board specific nand init */
   	NULL,
 };
-
+extern unsigned int is_ddr_166M;
 void start_armboot (void)
 {
   	init_fnc_t **init_fnc_ptr;
@@ -141,8 +152,66 @@ void start_armboot (void)
 	#ifdef CFG_PRINTF
 	printf("after buf == (uchar *)CFG_LOADADDR\n");
 	#endif
-	
+	printf("-----------------------------------------------------------------\n");
+	printf("AAAAAA:is_cpu_family()=%d\n",is_cpu_family());
+	printf("AAAAAA:cpu_is_3410()=%d\n",cpu_is_3410());
+	printf("AAAAAA:get_mem_type()=%d\n",get_mem_type());
+	printf("AAAAAA:get_device_type()=%d\n",get_device_type());
+	printf("AAAAAA:get_sysboot_value()=%d\n",get_sysboot_value());
+	printf("AAAAAA:get_cpu_rev()=%d\n",get_cpu_rev());
+	printf("AAAAAA:is_ddr_166M=%d\n",is_ddr_166M);
 
+	printf("-----------------------------------------------------------------\n");
+#if defined(PRCM_CLK_CFG2_200MHZ)
+	printf("AAAAAA:PRCM_CLK_CFG2_200MHZ\n");
+#elif defined (PRCM_CLK_CFG2_266MHZ)
+	printf("AAAAAA:PRCM_CLK_CFG2_266MHZ\n");
+#elif  defined(PRCM_CLK_CFG2_332MHZ)
+	printf("AAAAAA:PRCM_CLK_CFG2_332MHZ\n");
+#endif	
+	printf("-----------------------------------------------------------------\n");
+#if defined(L3_100MHZ)
+	printf("AAAAAA:L3_100MHZ\n");
+#elif defined(L3_133MHZ)
+	printf("AAAAAA:L3_133MHZ\n");
+#elif  defined(L3_165MHZ)
+	printf("AAAAAA:L3_165MHZ\n");
+#endif
+	printf("-----------------------------------------------------------------\n");
+	printf("AAAAAA:SDP_SDRC_RFR_CTRL =0x%08x\n",SDP_SDRC_RFR_CTRL );
+	printf("AAAAAA:SDP_3430_SDRC_RFR_CTRL_100MHz=0x%08x\n",SDP_3430_SDRC_RFR_CTRL_100MHz);
+	printf("AAAAAA:SDP_3430_SDRC_RFR_CTRL_133MHz=0x%08x\n",SDP_3430_SDRC_RFR_CTRL_133MHz);
+	printf("AAAAAA:SDP_3430_SDRC_RFR_CTRL_165MHz=0x%08x\n",SDP_3430_SDRC_RFR_CTRL_165MHz);
+	printf("-----------------------------------------------------------------\n");
+	printf("AAAAAA:INFINEON_SDRC_ACTIM_CTRLA_0=0x%08x\n",INFINEON_SDRC_ACTIM_CTRLA_0);
+	printf("AAAAAA:INFINEON_SDRC_ACTIM_CTRLB_0=0x%08x\n",INFINEON_SDRC_ACTIM_CTRLB_0);
+	printf("AAAAAA:INFINEON_V_ACTIMA_100=0x%08x\n",INFINEON_V_ACTIMA_100);
+	printf("AAAAAA:INFINEON_V_ACTIMB_100=0x%08x\n",INFINEON_V_ACTIMB_100);
+	printf("AAAAAA:INFINEON_V_ACTIMA_133=0x%08x\n",INFINEON_V_ACTIMA_133);
+	printf("AAAAAA:INFINEON_V_ACTIMB_133=0x%08x\n",INFINEON_V_ACTIMB_133);
+	printf("AAAAAA:INFINEON_V_ACTIMA_165=0x%08x\n",INFINEON_V_ACTIMA_165);
+	printf("AAAAAA:INFINEON_V_ACTIMB_165=0x%08x\n",INFINEON_V_ACTIMB_165);
+	printf("-----------------------------------------------------------------\n");
+	printf("AAAAAA:MICRON_SDRC_ACTIM_CTRLA_0=0x%08x\n",MICRON_SDRC_ACTIM_CTRLA_0);
+	printf("AAAAAA:MICRON_SDRC_ACTIM_CTRLB_0=0x%08x\n",MICRON_SDRC_ACTIM_CTRLB_0);
+	printf("AAAAAA:MICRON_V_ACTIMA_100=0x%08x\n",MICRON_V_ACTIMA_100);
+	printf("AAAAAA:MICRON_V_ACTIMB_100=0x%08x\n", MICRON_V_ACTIMB_100);
+	printf("AAAAAA:MICRON_V_ACTIMA_133=0x%08x\n",MICRON_V_ACTIMA_133);
+	printf("AAAAAA:MICRON_V_ACTIMB_133=0x%08x\n", MICRON_V_ACTIMB_133);
+	printf("AAAAAA:MICRON_V_ACTIMA_165=0x%08x\n",MICRON_V_ACTIMA_165);
+	printf("AAAAAA:MICRON_V_ACTIMB_165=0x%08x\n", MICRON_V_ACTIMB_165);
+	printf("-----------------------------------------------------------------\n");
+	printf("AAAAAA:REG SDRC_ACTIM_CTRLA_0=0x%08x\n",__raw_readl(SDRC_ACTIM_CTRLA_0));
+	printf("AAAAAA:REG SDRC_ACTIM_CTRLB_0=0x%08x\n",__raw_readl(SDRC_ACTIM_CTRLB_0));
+	printf("AAAAAA:REG SDRC_RFR_CTRL_0=0x%08x\n",__raw_readl(SDRC_RFR_CTRL_0));
+	printf("AAAAAA:REG SDRC_POWER=0x%08x\n",__raw_readl(SDRC_POWER));
+	printf("AAAAAA:REG SDRC_MANUAL_0=0x%08x\n",__raw_readl(SDRC_MANUAL_0));
+	printf("AAAAAA:REG SDRC_MR_0=0x%08x\n",__raw_readl(SDRC_MR_0));
+	printf("AAAAAA:REG SDRC_DLLA_CTRL=0x%08x\n",__raw_readl(SDRC_DLLA_CTRL));
+	//printf("AAAAAA:REG xxxx=0x%08x\n",__raw_readl(xxxx));
+	printf("-----------------------------------------------------------------\n");
+	//printf("AAAAAA:=%d\n",);
+	//printf("AAAAAA:REG xxxx=0x%08x\n",__raw_readl(xxxx));
 	/* go run U-Boot and never return */
   	printf("Starting OS Bootloader...\n");
  	((init_fnc_t *)CFG_LOADADDR)();

@@ -313,9 +313,11 @@ u32 get_sdr_cs_size(u32 offset)
 /*********************************************************************
  * config_3430sdram_ddr() - Init DDR on 3430SDP dev board.
  *********************************************************************/
+// ddr初始化
 void config_3430sdram_ddr(void)
 {
-
+	is_ddr_166M = 2;
+#if 1
 #ifndef CONFIG_DDR_256MB_STACKED
 	/* reset sdrc controller */
 	__raw_writel(SOFTRESET, SDRC_SYSCONFIG);
@@ -365,7 +367,7 @@ void config_3430sdram_ddr(void)
 	/* set up dll */
 	__raw_writel(SDP_SDRC_DLLAB_CTRL, SDRC_DLLA_CTRL);
 	delay(0x2000);	/* give time to lock */
-#else
+#else   /*#ifndef CONFIG_DDR_256MB_STACKED*/
        /* reset sdrc controller */
          __raw_writel(SOFTRESET, SDRC_SYSCONFIG);
          wait_on_value(BIT0, BIT0, SDRC_STATUS, 12000000);
@@ -438,6 +440,7 @@ void config_3430sdram_ddr(void)
 	__raw_writel(CMD_AUTOREFRESH, SDRC_MANUAL_0 + SDRC_CS1_OSET);
 	__raw_writel(CMD_AUTOREFRESH, SDRC_MANUAL_0 + SDRC_CS1_OSET);
 	__raw_writel(SDP_SDRC_MR_0_DDR, SDRC_MR_0 + SDRC_CS1_OSET);
+#endif
 #endif
 }
 #endif /* CFG_OMAPEVM_DDR */
@@ -939,6 +942,10 @@ void try_unlock_memory(void)
 
 void s_init(void)
 {
+	// 这里还不能使用printf函数	
+	#ifdef CFG_PRINTF
+	//printf("111111\n");
+	#endif
 	watchdog_init();
 #ifdef CONFIG_3430_AS_3410
 	/* setup the scalability control register for
@@ -1024,6 +1031,10 @@ void per_clocks_enable(void)
 	/* Enable UART1 clocks */
 	sr32(CM_FCLKEN1_CORE, 13, 1, 0x1);
 	sr32(CM_ICLKEN1_CORE, 13, 1, 0x1);
+
+	/* UART 3 Clocks */
+	sr32(CM_FCLKEN_PER, 11, 1, 0x1);
+	sr32(CM_ICLKEN_PER, 11, 1, 0x1);
 #endif
 
 #ifdef CONFIG_MMC
@@ -1142,6 +1153,10 @@ void per_clocks_enable(void)
 	MUX_VAL(CP(UART1_RTS),      (IDIS | PTD | DIS | M0)) /*UART1_RTS*/\
 	MUX_VAL(CP(UART1_CTS),      (IEN | PTU | DIS | M0)) /*UART1_CTS*/\
 	MUX_VAL(CP(UART1_RX),       (IEN | PTD | DIS | M0)) /*UART1_RX*/\
+	MUX_VAL(CP(UART3_CTS_RCTX), (IEN  | PTD | EN  | M0)) /*UART3_CTS_RCTX */\
+	MUX_VAL(CP(UART3_RTS_SD),   (IDIS | PTD | DIS | M0)) /*UART3_RTS_SD */\
+	MUX_VAL(CP(UART3_RX_IRRX),  (IEN  | PTD | DIS | M0)) /*UART3_RX_IRRX*/\
+	MUX_VAL(CP(UART3_TX_IRTX),  (IDIS | PTD | DIS | M0)) /*UART3_TX_IRTX*/\
 	MUX_VAL(CP(McBSP1_DX),      (IEN  | PTD | DIS | M4)) /*GPIO_158*/\
 	MUX_VAL(CP(SYS_32K),        (IEN  | PTD | DIS | M0)) /*SYS_32K*/\
 	MUX_VAL(CP(SYS_BOOT0),      (IEN  | PTD | DIS | M4)) /*GPIO_2 */\
@@ -1192,6 +1207,8 @@ int nor_read_boot(unsigned char *buf)
  *********************************************************/
 int nand_init(void)
 {
+	int ret;
+	printf("Enter nand_init!is_ddr_166M=%d\n",is_ddr_166M);
 	/* global settings */
 	__raw_writel(0x10, GPMC_SYSCONFIG);	/* smart idle */
 	__raw_writel(0x0, GPMC_IRQENABLE);	/* isr's sources masked */
@@ -1224,12 +1241,17 @@ int nand_init(void)
         		     (1<<6) ),  (GPMC_CONFIG7 + GPMC_CONFIG_CS0));
         	delay(2000);
 
-         	if (nand_chip()){
+		ret = nand_chip();
+         	if (ret){
 #ifdef CFG_PRINTF
         		printf("Unsupported Chip!\n");
 #endif
         		return 1;
         	}
+		else
+		{
+			printf("ret=%d\n",ret);
+		}
 
 	}
 
@@ -1254,6 +1276,7 @@ int nand_init(void)
         		return 1;
         	}
 	}
+	printf("Exit nand_init!\n");
 	return 0;
 }
 

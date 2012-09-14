@@ -1,3 +1,3 @@
 ARCH  = arm
 CPU   = omap3
-BOARD = omap3evm
+BOARD = omap3beagle

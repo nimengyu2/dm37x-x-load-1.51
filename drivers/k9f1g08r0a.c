@@ -88,7 +88,7 @@ int omap_calculate_ecc_bch8(const uint8_t *dat, uint8_t *ecc_code);
 or EIGHT_BIT_ERROR_CORRECT"
 #endif
 
-unsigned int is_ddr_166M;
+unsigned int is_ddr_166M = 3;
 /*******************************************************
  * Routine: delay
  * Description: spinning delay to use before udelay works
@@ -221,7 +221,9 @@ static int NanD_Address(unsigned int numbytes, unsigned long ofs)
 int nand_chip()
 {
 	int mfr, id;
-
+	#ifdef CFG_PRINTF
+	printf("AAAAAA:enter nand_chip\n");
+	#endif
  	NAND_ENABLE_CE();
 
  	if (NanD_Command(NAND_CMD_RESET)) {
@@ -229,12 +231,24 @@ int nand_chip()
  		NAND_DISABLE_CE();
 		return 1;
 	}
+	else
+	{
+		#ifdef CFG_PRINTF
+		printf("AAAAAA:nand_chip:RESET\n");
+		#endif
+	}
 
  	if (NanD_Command(NAND_CMD_READID)) {
  		printf("Err: READID\n");
  		NAND_DISABLE_CE();
 		return 1;
  	}
+	else
+	{
+		#ifdef CFG_PRINTF
+		printf("AAAAAA:nand_chip:READID\n");
+		#endif
+	}
 
  	NanD_Address(ADDR_COLUMN, 0);
 
@@ -243,6 +257,9 @@ int nand_chip()
 
 	NAND_DISABLE_CE();
 
+	#ifdef CFG_PRINTF
+	printf("AAAAAA:nand_chip:before switch (mfr)  is_ddr_166M=%d\n",is_ddr_166M);
+	#endif
 	switch (mfr) {
 		/* Hynix NAND Part */
 		case HYNIX4GiB_MFR:
@@ -265,7 +282,9 @@ int nand_chip()
 			is_ddr_166M = 1;
 			break;
 	}
-
+	#ifdef CFG_PRINTF
+	printf("AAAAAA:nand_chip:after switch (mfr)  is_ddr_166M=%d\n",is_ddr_166M);
+	#endif
 	return (id != K9F1G08R0A_ID);
 }
 

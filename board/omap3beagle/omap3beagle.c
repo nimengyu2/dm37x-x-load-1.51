@@ -275,7 +275,7 @@ int beagle_revision(void)
 	omap_free_gpio(172);
 	omap_free_gpio(173);
 
-	return 7; // 111
+	return 6; // 110
 	return rev;
 }
 
@@ -308,6 +308,7 @@ u32 wait_on_value(u32 read_bit_mask, u32 match_value, u32 read_addr, u32 bound)
 			return 0;
 	} while(1);
 }
+extern unsigned int is_ddr_166M;
 
 #ifdef CFG_3430SDRAM_DDR
 /*********************************************************************
@@ -315,6 +316,7 @@ u32 wait_on_value(u32 read_bit_mask, u32 match_value, u32 read_addr, u32 bound)
  *********************************************************************/
 void config_3430sdram_ddr(void)
 {
+	is_ddr_166M = 2;
 	/* reset sdrc controller */
 	__raw_writel(SOFTRESET, SDRC_SYSCONFIG);
 	wait_on_value(BIT0, BIT0, SDRC_STATUS, 12000000);
@@ -323,6 +325,7 @@ void config_3430sdram_ddr(void)
 	/* setup sdrc to ball mux */
 	__raw_writel(SDP_SDRC_SHARING, SDRC_SHARING);
 
+#if 0
 	if (beagle_revision() == REVISION_XM) {
 		__raw_writel(0x2, SDRC_CS_CFG); /* 256MB/bank */
 		__raw_writel(SDP_SDRC_MDCFG_0_DDR_XM, SDRC_MCFG_0);
@@ -344,6 +347,17 @@ void config_3430sdram_ddr(void)
 		__raw_writel(SDP_3430_SDRC_RFR_CTRL_165MHz, SDRC_RFR_CTRL_0);
 		__raw_writel(SDP_3430_SDRC_RFR_CTRL_165MHz, SDRC_RFR_CTRL_1);
 	}
+#endif
+	__raw_writel(0x1, SDRC_CS_CFG); /* 128MB/bank */
+	__raw_writel(SDP_SDRC_MDCFG_0_DDR, SDRC_MCFG_0);
+	__raw_writel(SDP_SDRC_MDCFG_0_DDR, SDRC_MCFG_1);
+	__raw_writel(0x7A59B485, SDRC_ACTIM_CTRLA_0);
+	__raw_writel(0x00011212, SDRC_ACTIM_CTRLB_0);
+	__raw_writel(0x7A59B485, SDRC_ACTIM_CTRLA_1);
+	__raw_writel(0x00011212, SDRC_ACTIM_CTRLB_1);
+	__raw_writel(0x0003de01, SDRC_RFR_CTRL_0);
+	__raw_writel(0x0003de01, SDRC_RFR_CTRL_1);
+
 
 	__raw_writel(SDP_SDRC_POWER_POP, SDRC_POWER);
 

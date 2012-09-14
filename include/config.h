@@ -1,2 +1,2 @@
 /* Automatically generated - do not edit */
-#include <configs/omap3evm.h>
+#include <configs/omap3beagle.h>
