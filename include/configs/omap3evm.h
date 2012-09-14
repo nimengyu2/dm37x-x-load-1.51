@@ -64,8 +64,8 @@
 #define V_SCLK                   V_OSCK
 #endif
 
-//#define PRCM_CLK_CFG2_266MHZ   1    /* VDD2=1.15v - 133MHz DDR */
-#define PRCM_CLK_CFG2_332MHZ     1    /* VDD2=1.15v - 166MHz DDR */
+#define PRCM_CLK_CFG2_266MHZ   1    /* VDD2=1.15v - 133MHz DDR */
+//#define PRCM_CLK_CFG2_332MHZ     1    /* VDD2=1.15v - 166MHz DDR */
 #define PRCM_PCLK_OPP2           1    /* ARM=381MHz - VDD1=1.20v */
 
 /* Memory type */
@@ -93,12 +93,14 @@
 #define CFG_NS16550_REG_SIZE     (-4)
 #define CFG_NS16550_CLK          (48000000)
 #define CFG_NS16550_COM1         OMAP34XX_UART1
+#define CFG_NS16550_COM3         OMAP34XX_UART3
 
 /*
  * select serial console configuration
  */
 #define CONFIG_SERIAL1           1    /* UART1 on OMAP3EVM */
-#define CONFIG_CONS_INDEX        1
+#define CONFIG_SERIAL3           3    /* UART1 on OMAP3EVM */
+#define CONFIG_CONS_INDEX        3
 
 #define CONFIG_BAUDRATE          115200
 #define CFG_PBSIZE               256

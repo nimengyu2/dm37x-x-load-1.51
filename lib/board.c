@@ -40,7 +40,7 @@ extern u32 get_mem_type(void);
 #ifdef CFG_PRINTF
 int print_info(void)
 {
-	printf("\n\nTexas Instruments X-Loader 1.51 ("
+	printf("\n\nYU Texas Instruments X-Loader 1.51 ("
 			__DATE__ " - " __TIME__ ")\n");
 	return 0;
 }
@@ -70,16 +70,31 @@ void start_armboot (void)
 			hang ();
 		}
 	}
+	#ifdef CFG_PRINTF
+	printf("after init_sequence\n");
+	#endif
 
 	misc_init_r();
+	#ifdef CFG_PRINTF
+	printf("after misc_init_r\n");
+	#endif
 	buf =  (uchar*) CFG_LOADADDR;
+	#ifdef CFG_PRINTF
+	printf("after (uchar*) CFG_LOADADDR\n");
+	#endif
 
 	/* Always first try mmc without checking boot pins */
 #ifndef CONFIG_OMAP3_BEAGLE
-	if ((get_mem_type() == MMC_ONENAND) || (get_mem_type() == MMC_NAND))
+	#ifdef CFG_PRINTF
+	printf("after ndef CONFIG_OMAP3_BEAGLE\n");
+	#endif
+	//if ((get_mem_type() == MMC_ONENAND) || (get_mem_type() == MMC_NAND))
 #endif	/* CONFIG_OMAP3_BEAGLE */
 		buf += mmc_boot(buf);
 
+	#ifdef CFG_PRINTF
+	printf("after mmc_boot(buf)\n");
+	#endif
 	if (buf == (uchar *)CFG_LOADADDR) {
 		if (get_mem_type() == GPMC_NAND){
 #ifdef CFG_PRINTF
@@ -107,6 +122,9 @@ void start_armboot (void)
 	 * FIXME: Currently coping uboot image,
 	 * ideally we should leverage XIP feature here
 	 */
+	#ifdef CFG_PRINTF
+	printf("after defined (CONFIG_AM3517EVM)\n");
+	#endif
 	if (get_mem_type() == GPMC_NOR) {
 		int size;
 		printf("Booting from NOR Flash...\n");
@@ -115,9 +133,15 @@ void start_armboot (void)
 			buf += size;
 	}
 #endif
-
+	#ifdef CFG_PRINTF
+	printf("before buf == (uchar *)CFG_LOADADDR\n");
+	#endif
 	if (buf == (uchar *)CFG_LOADADDR)
 		hang();
+	#ifdef CFG_PRINTF
+	printf("after buf == (uchar *)CFG_LOADADDR\n");
+	#endif
+	
 
 	/* go run U-Boot and never return */
   	printf("Starting OS Bootloader...\n");

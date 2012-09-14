@@ -4,10 +4,12 @@ CROSS_COMPILE=arm-none-linux-gnueabi-
 ARCH=arm
 DEFAULT_CONFIG=""
 
+rm -rf MLO
 make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm distclean
 make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm omap3beagle_config
 make CROSS_COMPILE=arm-none-linux-gnueabi- ARCH=arm
 signGP x-load.bin
+cp x-load.bin.ift MLO
 
 
 #DAEMON=/usr/sbin/pcscd

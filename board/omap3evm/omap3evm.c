@@ -190,7 +190,7 @@ u32 is_cpu_family(void)
 	if ((cpuid & 0xf) == 0x0) {
 		cpu_family = CPU_OMAP34XX;
 		#ifdef CFG_PRINTF
-        		printf("cpuid  0xf == 0x0 cpu_family = CPU_OMAP34XX\n");
+        		//printf("cpuid  0xf == 0x0 cpu_family = CPU_OMAP34XX\n");
 		#endif
 	} else {
 		cpuid = __raw_readl(OMAP34XX_CONTROL_ID);
@@ -200,25 +200,25 @@ u32 is_cpu_family(void)
 			case HAWKEYE_OMAP34XX:
 				cpu_family = CPU_OMAP34XX;
 				#ifdef CFG_PRINTF
-        			printf("HAWKEYE_OMAP34XX cpu_family =  CPU_OMAP34XX\n");
+        			//printf("HAWKEYE_OMAP34XX cpu_family =  CPU_OMAP34XX\n");
 				#endif
 				break;
 			case HAWKEYE_AM35XX:
 				cpu_family = CPU_AM35XX;
 				#ifdef CFG_PRINTF
-        			printf("cpu_family =  CPU_AM35XX\n");
+        			//printf("cpu_family =  CPU_AM35XX\n");
 				#endif
 				break;
 			case HAWKEYE_OMAP36XX:
 				cpu_family = CPU_OMAP36XX;
 				#ifdef CFG_PRINTF
-        			printf("cpu_family =  CPU_OMAP36XX\n");
+        			//printf("cpu_family =  CPU_OMAP36XX\n");
 				#endif
 				break;
 			default:
 				cpu_family = CPU_OMAP34XX;
 				#ifdef CFG_PRINTF
-        			printf("default cpu_family =  CPU_OMAP34XX\n");
+        			//printf("default cpu_family =  CPU_OMAP34XX\n");
 				#endif
 				break;
 		}
