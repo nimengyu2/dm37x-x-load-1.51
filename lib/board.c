@@ -214,6 +214,7 @@ void start_armboot (void)
 	//printf("AAAAAA:REG xxxx=0x%08x\n",__raw_readl(xxxx));
 	/* go run U-Boot and never return */
   	printf("Starting OS Bootloader...\n");
+	//while(1);
  	((init_fnc_t *)CFG_LOADADDR)();
 
 	/* should never come here */

@@ -358,7 +358,10 @@ void config_3430sdram_ddr(void)
 	__raw_writel(0x00011212, SDRC_ACTIM_CTRLB_1);
 	__raw_writel(0x0003de01, SDRC_RFR_CTRL_0);
 	__raw_writel(0x0003de01, SDRC_RFR_CTRL_1);
+
+	__raw_writel(0x00000020, SDRC_EMR2_1);	/* weak-strength driver */
 #endif
+
 #if 0
 	__raw_writel(0x1, SDRC_CS_CFG); /* 128MB/bank */
 	__raw_writel(SDP_SDRC_MDCFG_0_DDR, SDRC_MCFG_0);

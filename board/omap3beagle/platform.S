@@ -364,22 +364,22 @@ get_per_dpll_param:
  * (Populated for 13MHz only)
  */
 mpu_36x_dpll_param:
-.word 300, 12, 0, 1
+.word 300, 12, 0, 1   // default   300, 12, 0, 1 
 .word 300, 12, 0, 1
 .word 300, 12, 0, 1
 .word 300, 12, 0, 1
 
 iva_36x_dpll_param:
-.word 10, 0, 0, 1
+.word 10, 0, 0, 1    // default   10, 0, 0, 1
 .word 10, 0, 0, 1
 .word 10, 0, 0, 1
 .word 10, 0, 0, 1
 
 core_36x_dpll_param:
-.word 200, 12, 0, 1
-.word 200, 12, 0, 1
-.word 200, 12, 0, 1
-.word 200, 12, 0, 1
+.word 100, 12, 0, 1   // default   200, 12, 0, 1
+.word 100, 12, 0, 1
+.word 100, 12, 0, 1
+.word 100, 12, 0, 1
 
 per_36x_dpll_param:
 /*    SYSCLK     M      N      M2      M3      M4     M5      M6      m2DIV */
